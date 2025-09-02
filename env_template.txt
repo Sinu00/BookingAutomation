@@ -1,0 +1,29 @@
+# Google Sheets Configuration
+GOOGLE_SHEETS_ID=your_sheet_id_here
+GOOGLE_CREDENTIALS_FILE=google_credentials.json
+
+# Temporary Email Service
+TEMP_EMAIL_API_KEY=your_api_key_here
+TEMP_EMAIL_SERVICE=guerrillamail
+
+# WhatsApp Configuration
+WHATSAPP_API_TOKEN=your_whatsapp_token
+WHATSAPP_PHONE_NUMBER=your_phone_number
+WHATSAPP_GROUP_ID=your_group_id
+
+# Nusuk Website Configuration
+NUSUK_BASE_URL=https://services.nusuk.sa/nusuk-svc/auth/register
+HEADLESS_MODE=False
+
+# Scheduling Configuration
+CHECK_INTERVAL_MINUTES=30
+QR_RETRIEVAL_BUFFER_HOURS=2
+
+# Logging Configuration
+LOG_LEVEL=INFO
+LOG_FILE=logs/nusuk_automation.log
+
+# Automation Settings
+DELAY_BETWEEN_ACTIONS=2
+MAX_RETRIES=3
+TIMEOUT_SECONDS=30

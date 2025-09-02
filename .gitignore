@@ -1,0 +1,141 @@
+# Google API Credentials (sensitive)
+google_credentials.json
+
+# Chrome Extension (not needed for core automation)
+chrome-extension/
+
+# Test and Debug Files
+test_*.py
+debug_*.py
+test_automation.py
+test_browser.py
+test_foreign_guest.py
+test_form_filling.py
+test_google_sheets.py
+test_guerrillamail.py
+test_language_switch*.py
+test_my_sheet.py
+test_setup.py
+test_undetected_driver.py
+tests/
+
+# Status and Setup Files
+status_check.py
+setup_firefox.py
+setup_procedure.md
+install_dependencies.py
+
+# Debug Images and Screenshots
+debug_*.png
+screenshots/
+
+# Logs
+logs/
+*.log
+
+# Python Virtual Environment
+nusuk_env/
+venv/
+env/
+.venv/
+.env
+
+# Python Cache and Compiled Files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation that's not essential
+README_UNDETECTED.md
+FIREFOX_SETUP.md
+CHROME_PROFILE_SETUP.md
+INSTALLATION.md
+QUICK_START.md
+SETUP_GUIDE.md
+TROUBLESHOOTING.md
+
+# Chrome Profile Data
+chrome_stealth_*/
+stealth_profile_*/
+
+# Temporary Email Data
+temp_email_*/
+temp_mail_*/
+
+# Automation Artifacts
+automation_*.log
+bot_*.log
+session_*.log
+
+# Backup Files
+*.backup
+*.old
+*.orig
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Configuration Overrides
+config_override.py
+local_config.py
+
+# Screenshots and Debug Output
+debug_output/
+screenshots/
+captures/
+
+# Temporary Directories
+temp/
+tmp/
+cache/

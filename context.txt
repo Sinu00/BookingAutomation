@@ -1,0 +1,130 @@
+NUSUK AUTOMATION TOOL - PROJECT CONTEXT
+=============================================
+
+OVERVIEW:
+---------
+This automation tool is designed to handle the registration and booking process for Nusuk services 
+(https://services.nusuk.sa/nusuk-svc/auth/register) for foreign guests, specifically for Roudha bookings.
+
+PROJECT PHASES:
+---------------
+
+PHASE 1: Registration & Initial Booking
+----------------------------------------
+1. Website Navigation:
+   - Navigate to https://services.nusuk.sa/nusuk-svc/auth/register
+   - Select "Foreign Guest" option
+   - Handle language switching (Arabic to English if needed)
+
+2. Data Input from Google Sheet:
+   Google Sheet Columns:
+   - Passport NO
+   - VISA NO  
+   - NATIONALITY
+   - DOB (Date of Birth)
+   - SEX/Gender
+   - BOOKING DATE
+   - TIME
+   - STATUS
+   - NAME
+   - APPROVED DATE
+   - APPROVED TIME
+
+3. Registration Process Steps:
+   Step 1: Initial Information
+   - Input: VISA NO, NATIONALITY, Passport NO (from sheet)
+   - Action: Press "Next"
+   
+   Step 2: Personal Details
+   - Input: DOB, Gender, Phone Number
+   - Disability Question: Always select "No"
+   - Action: Press "Next"
+   
+   Step 3: Account Creation
+   - Input: Email (temporary email), Password, Confirm Password
+   - Email Verification: OTP sent to temp email
+   - Action: Retrieve OTP and confirm email
+
+4. Booking Process:
+   - Login to account after registration
+   - Navigate to Roudha booking section
+   - Book date and time according to sheet data
+   - Confirm booking
+
+PHASE 2: QR Code Retrieval
+--------------------------
+1. Automated Login (2 hours before booking time):
+   - Calculate login time (booking time - 2 hours)
+   - Example: If booking at 6:00, login at 4:00
+   
+2. QR Code Capture:
+   - Navigate to QR code page after login
+   - Take screenshot of QR code
+   - Save options:
+     a) Send to WhatsApp
+     b) Save to Google Sheet
+
+TECHNICAL REQUIREMENTS:
+-----------------------
+1. Web Automation:
+   - Selenium WebDriver for browser automation
+   - Handle dynamic page loading and AJAX requests
+   
+2. Temporary Email Service:
+   - API integration for temporary email generation
+   - Email monitoring for OTP retrieval
+   
+3. Google Sheets Integration:
+   - Read input data from sheets
+   - Update status columns
+   - Save QR code images (optional)
+   
+4. Scheduling System:
+   - Time-based automation for QR code retrieval
+   - Handle multiple bookings with different times
+   
+5. Notification System:
+   - WhatsApp integration for QR code delivery
+   - Error notification system
+
+6. Error Handling:
+   - Captcha detection and handling
+   - Network timeout management
+   - Website structure changes detection
+
+SECURITY CONSIDERATIONS:
+------------------------
+- Secure storage of credentials
+- Rate limiting to avoid detection
+- User agent rotation
+- Proxy support (if needed)
+
+COMPLIANCE NOTES:
+-----------------
+- Ensure compliance with website terms of service
+- Respect rate limits and website policies
+- Implement proper error handling and logging
+
+STATUS TRACKING:
+----------------
+The automation should update the Google Sheet STATUS column with:
+- "Pending" - Initial state
+- "Registered" - After successful registration
+- "Booked" - After successful booking
+- "QR_Sent" - After QR code is captured and sent
+- "Failed" - If any step fails
+- "Completed" - Full process completed
+
+EXPECTED WORKFLOW:
+------------------
+1. Read data from Google Sheet
+2. For each row with "Pending" status:
+   - Register account using row data
+   - Book Roudha date/time
+   - Update status to "Booked"
+   - Schedule QR code retrieval for (booking_time - 2 hours)
+3. At scheduled times:
+   - Login to account
+   - Capture QR code
+   - Send/Save QR code
+   - Update status to "Completed"
