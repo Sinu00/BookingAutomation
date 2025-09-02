@@ -1300,182 +1300,88 @@ class NusukBot:
             return False
     
     def create_account(self, record_data: Dict[str, Any]):
-        """Create account with temporary email and fixed password"""
+        """Create account with manual email/password input - user handles this page manually"""
         try:
             logger.log_step("Creating account", "STARTED")
+            logger.info("🎯 MANUAL MODE: Email and password page - please fill manually")
             
-            # Generate temporary email
-            temp_email = self.email_service.generate_email()
-            if not temp_email:
-                logger.error("Failed to generate temporary email")
-                return False
+            # Wait for user to manually fill email and password
+            logger.info("⏳ Waiting for manual input... Please fill in:")
+            logger.info("   - Email address")
+            logger.info("   - Password")
+            logger.info("   - Confirm Password")
+            logger.info("   - Click Create Account button when ready")
             
-            logger.log_success("Temporary email generated", temp_email)
+            # Wait 15 seconds for manual input
+            wait_time = 15
+            logger.info(f"⏰ Waiting {wait_time} seconds for manual completion...")
             
-            # Fill Email with human-like typing
-            email_selectors = [
-                "//input[@name='email']",
-                "//input[@type='email']",
-                "//input[@id='email']",
-                "#email",
-                "[data-field='email']"
-            ]
+            # Countdown timer
+            for i in range(wait_time, 0, -1):
+                logger.info(f"⏳ Time remaining: {i} seconds...")
+                time.sleep(1)
             
-            email_filled = False
-            for selector in email_selectors:
-                try:
-                    if selector.startswith("//"):
-                        element = self.wait.until(EC.presence_of_element_located((By.XPATH, selector)))
-                    else:
-                        element = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
-                    
-                    self.simulate_human_typing(element, temp_email)
-                    email_filled = True
-                    logger.log_success("Email filled with human-like typing")
-                    break
-                except (TimeoutException, NoSuchElementException):
-                    continue
+            logger.info("✅ Manual input time completed - checking if account was created...")
             
-            if not email_filled:
-                logger.error("Email field not found")
-                return False
-            
-            # Fill Password with human-like typing
-            password_selectors = [
-                "//input[@name='password']",
-                "//input[@type='password']",
-                "//input[@id='password']",
-                "#password",
-                "[data-field='password']"
-            ]
-            
-            password_filled = False
-            for selector in password_selectors:
-                try:
-                    if selector.startswith("//"):
-                        element = self.wait.until(EC.presence_of_element_located((By.XPATH, selector)))
-                    else:
-                        element = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
-                    
-                    self.simulate_human_typing(element, "Hasan@123")
-                    password_filled = True
-                    logger.log_success("Password filled with human-like typing")
-                    break
-                except (TimeoutException, NoSuchElementException):
-                    continue
-            
-            if not password_filled:
-                logger.error("Password field not found")
-                return False
-            
-            # Fill Confirm Password with human-like typing
-            confirm_password_selectors = [
-                "//input[@placeholder='Confirm Password']",
-                "//input[contains(@placeholder, 'Confirm')]",
-                "//input[contains(@placeholder, 'Password')]",
-                "(//input[@type='password'])[2]",
-                "(//input[@type='password'])[last()]",
-                "//input[@name='confirm_password']",
-                "//input[@name='password_confirm']",
-                "//input[@name='confirmPassword']",
-                "//input[@name='confirm-password']",
-                "//input[@id='confirm_password']",
-                "//input[@id='password_confirm']",
-                "//input[@id='confirmPassword']",
-                "#confirm_password",
-                "#password_confirm",
-                "[data-field='confirm_password']"
-            ]
-            
-            confirm_password_filled = False
-            for selector in confirm_password_selectors:
-                try:
-                    if selector.startswith("//"):
-                        element = self.wait.until(EC.presence_of_element_located((By.XPATH, selector)))
-                    else:
-                        element = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
-                    
-                    self.simulate_human_typing(element, "Hasan@123")
-                    confirm_password_filled = True
-                    logger.log_success("Confirm password filled with human-like typing")
-                    break
-                except (TimeoutException, NoSuchElementException):
-                    continue
-            
-            if not confirm_password_filled:
-                logger.error("Confirm password field not found")
-                return False
-            
-            # BEFORE clicking Create Account button, add comprehensive reCAPTCHA handling:
-            
-            # Add extensive human behavior simulation
-            logger.info("Adding comprehensive human behavior simulation...")
-            self.add_human_behavior()
-            
-            # Add more human-like interactions
-            self.add_human_behavior()
-            
-            # Wait for reCAPTCHA
-            self.wait_for_recaptcha()
-            
-            # Add longer random delay before clicking (5-15 seconds)
-            delay = random.uniform(5, 15)
-            logger.info(f"Waiting {delay:.1f} seconds before clicking Create Account button...")
-            time.sleep(delay)
-            
-            # Add one more human behavior simulation right before clicking
-            self.add_human_behavior()
-            
-            # Click Create Account button with human-like behavior
-            create_account_selectors = [
-                "//button[@type='submit' and contains(@class, 'p-button') and contains(@class, 'btn') and contains(@class, 'login-btn')]",
-                "//button[contains(@class, 'p-button') and contains(@class, 'btn') and contains(@class, 'login-btn')]",
-                "//button[contains(@class, 'btn') and contains(@class, 'login-btn')]",
-                "//button[.//span[contains(text(), 'Create Account')]]",
-                "//button[contains(text(), 'Create Account')]",
-                "//button[contains(text(), 'Register')]",
-                "//button[contains(text(), 'Sign Up')]",
-                "//button[@type='submit']",
-                "//input[@type='submit']",
-                ".btn.login-btn",
-                ".p-button.btn",
-                "#create-account-btn"
-            ]
-            
-            for selector in create_account_selectors:
-                try:
-                    if selector.startswith("//"):
-                        element = self.wait.until(EC.element_to_be_clickable((By.XPATH, selector)))
-                    else:
-                        element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
-                    
-                    # Wait a bit more to ensure button is fully enabled
-                    time.sleep(2)
-                    
-                    # Check if button is enabled (not disabled)
-                    if element.is_enabled():
-                        logger.info(f"Found enabled Create Account button: '{element.text}' - Clicking with human-like behavior...")
-                        
-                        # Use human-like clicking
-                        self.simulate_human_click(element)
-                        
-                        # Store email for later use
-                        self.current_email = temp_email
-                        
-                        logger.log_success("Create Account button clicked successfully")
-                        return True
-                    else:
-                        logger.warning(f"Create Account button found but disabled: '{element.text}'")
+            # Check if we're on a success page or if there are any error messages
+            try:
+                # Look for success indicators
+                success_indicators = [
+                    "//div[contains(text(), 'success')]",
+                    "//div[contains(text(), 'Success')]",
+                    "//div[contains(text(), 'Account created')]",
+                    "//div[contains(text(), 'Verification')]",
+                    "//div[contains(text(), 'OTP')]",
+                    "//div[contains(text(), 'verification code')]",
+                    "//input[@name='otp']",
+                    "//input[@placeholder*='OTP']",
+                    "//input[@placeholder*='verification']"
+                ]
+                
+                success_found = False
+                for selector in success_indicators:
+                    try:
+                        element = self.driver.find_element("xpath", selector)
+                        if element.is_displayed():
+                            logger.log_success("Account creation appears successful", f"Found: {element.text or 'Success indicator'}")
+                            success_found = True
+                            break
+                    except:
                         continue
-                        
-                except (TimeoutException, NoSuchElementException):
-                    continue
-            
-            logger.error("Create Account button not found")
-            return False
+                
+                if not success_found:
+                    # Check for error messages
+                    error_selectors = [
+                        "//div[contains(@class, 'error')]",
+                        "//div[contains(@class, 'alert')]",
+                        "//span[contains(@class, 'error')]",
+                        "//p[contains(@class, 'error')]"
+                    ]
+                    
+                    for selector in error_selectors:
+                        try:
+                            error_element = self.driver.find_element("xpath", selector)
+                            if error_element.is_displayed():
+                                logger.warning(f"Potential error detected: {error_element.text}")
+                        except:
+                            continue
+                    
+                    logger.info("No clear success/error indicators found - assuming manual completion was successful")
+                
+                # Store a placeholder email for tracking purposes
+                self.current_email = "MANUAL_INPUT_COMPLETED"
+                
+                logger.log_success("Manual account creation completed", "Proceeding to next step...")
+                return True
+                
+            except Exception as e:
+                logger.warning(f"Error checking account creation status: {e}")
+                # Assume manual completion was successful
+                self.current_email = "MANUAL_INPUT_COMPLETED"
+                return True
             
         except Exception as e:
-            logger.log_error_with_context(e, "Creating account")
+            logger.log_error_with_context(e, "Manual account creation")
             return False
     
     def monitor_inbox_for_otp(self, email_address: str, max_wait_time: int = 60):
@@ -1516,23 +1422,17 @@ class NusukBot:
             return False
     
     def verify_email_otp(self):
-        """Verify email with OTP from temporary email"""
+        """Verify email with OTP - adapted for manual email handling"""
         try:
             logger.log_step("Verifying email with OTP", "STARTED")
             
-            # Wait for OTP to arrive
-            logger.info("Waiting for OTP email...")
-            time.sleep(10)  # Wait for email to arrive
+            # Since user handled email manually, we need to check if we're on OTP page
+            logger.info("🔍 Checking if we're on OTP verification page...")
             
-            # Get OTP from temporary email
-            otp = self.email_service.get_otp(self.current_email)
-            if not otp:
-                logger.error("Failed to retrieve OTP")
-                return False
+            # Wait a bit for page to load
+            time.sleep(3)
             
-            logger.log_success("OTP retrieved", f"OTP: {otp}")
-            
-            # Fill OTP field
+            # Look for OTP input field to confirm we're on verification page
             otp_selectors = [
                 "//input[@name='otp']",
                 "//input[@name='verification_code']",
@@ -1547,56 +1447,92 @@ class NusukBot:
                 "[data-field='verification_code']"
             ]
             
-            otp_filled = False
+            otp_field_found = False
             for selector in otp_selectors:
                 try:
-                    if selector.startswith("//"):
-                        element = self.wait.until(EC.presence_of_element_located((By.XPATH, selector)))
-                    else:
-                        element = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
-                    
-                    element.clear()
-                    element.send_keys(otp)
-                    otp_filled = True
-                    logger.log_success("OTP filled")
-                    break
-                except (TimeoutException, NoSuchElementException):
+                    element = self.driver.find_element("xpath", selector)
+                    if element.is_displayed():
+                        logger.log_success("OTP verification page detected", "Found OTP input field")
+                        otp_field_found = True
+                        break
+                except:
                     continue
             
-            if not otp_filled:
-                logger.error("OTP field not found")
-                return False
-            
-            # Click Verify button
-            verify_selectors = [
-                "//button[contains(text(), 'Verify')]",
-                "//button[contains(text(), 'Confirm')]",
-                "//button[contains(text(), 'Submit')]",
-                "//input[@type='submit']",
-                "//button[@type='submit']",
-                ".verify-btn",
-                "#verify-btn"
-            ]
-            
-            for selector in verify_selectors:
-                try:
-                    if selector.startswith("//"):
-                        element = self.wait.until(EC.element_to_be_clickable((By.XPATH, selector)))
-                    else:
-                        element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
-                    
-                    element.click()
-                    time.sleep(3)
-                    logger.log_success("Verify button clicked")
+            if not otp_field_found:
+                logger.warning("OTP verification page not detected - checking current page status")
+                
+                # Check if we're still on account creation page
+                current_url = self.driver.current_url
+                page_title = self.driver.title
+                logger.info(f"Current URL: {current_url}")
+                logger.info(f"Page title: {page_title}")
+                
+                # Look for any error messages or success indicators
+                page_text = self.driver.page_source.lower()
+                if 'error' in page_text or 'failed' in page_text:
+                    logger.error("Account creation appears to have failed")
+                    return False
+                elif 'success' in page_text or 'verification' in page_text:
+                    logger.info("Account creation appears successful, proceeding...")
                     return True
-                except (TimeoutException, NoSuchElementException):
-                    continue
+                else:
+                    logger.warning("Unable to determine page status - proceeding anyway")
+                    return True
             
-            logger.error("Verify button not found")
-            return False
+            # If we're on OTP page, wait for user to handle it manually
+            logger.info("🎯 MANUAL MODE: OTP verification page detected")
+            logger.info("⏳ Please check your email and enter the OTP manually")
+            logger.info("⏰ Waiting for manual OTP verification...")
+            
+            # Wait for user to complete OTP verification
+            wait_time = 20  # Give more time for OTP verification
+            logger.info(f"⏰ Waiting {wait_time} seconds for manual OTP completion...")
+            
+            # Countdown timer
+            for i in range(wait_time, 0, -1):
+                logger.info(f"⏳ Time remaining: {i} seconds...")
+                time.sleep(1)
+            
+            logger.info("✅ Manual OTP verification time completed - checking status...")
+            
+            # Check if verification was successful
+            try:
+                # Look for success indicators after OTP verification
+                success_indicators = [
+                    "//div[contains(text(), 'success')]",
+                    "//div[contains(text(), 'Success')]",
+                    "//div[contains(text(), 'verified')]",
+                    "//div[contains(text(), 'Verification successful')]",
+                    "//div[contains(text(), 'Account activated')]",
+                    "//button[contains(text(), 'Continue')]",
+                    "//button[contains(text(), 'Next')]",
+                    "//a[contains(text(), 'Continue')]"
+                ]
+                
+                success_found = False
+                for selector in success_indicators:
+                    try:
+                        element = self.driver.find_element("xpath", selector)
+                        if element.is_displayed():
+                            logger.log_success("OTP verification appears successful", f"Found: {element.text or 'Success indicator'}")
+                            success_found = True
+                            break
+                    except:
+                        continue
+                
+                if not success_found:
+                    logger.info("No clear success indicators found - assuming manual verification was successful")
+                
+                logger.log_success("Manual OTP verification completed", "Proceeding to next step...")
+                return True
+                
+            except Exception as e:
+                logger.warning(f"Error checking OTP verification status: {e}")
+                # Assume manual verification was successful
+                return True
             
         except Exception as e:
-            logger.log_error_with_context(e, "Verifying email with OTP")
+            logger.log_error_with_context(e, "Manual OTP verification")
             return False
     
     def process_record(self, record: Dict[str, Any]):
